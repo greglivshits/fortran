@@ -43,6 +43,7 @@
             cm(i) = x(i)/Totmass
         Enddo
     ! Moment of inertia
+        TI(1:3, 1:3)=0
         Do i=1,NumAt
             TI(1,1)=TI(1,1)+S(i)*((C(2,i)-cm(2))**2+(C(3,i)-cm(3))**2)
             TI(1,2)=TI(1,2)-S(i)*(C(1,i)-cm(1))*(C(2,i)-cm(2))
@@ -69,3 +70,4 @@
         Write(6,'(/14x,3f15.5)') TI(1:3, 2)
         Write(6,'(/14x,3f15.5)') TI(1:3, 3)
     end program Console1
+
