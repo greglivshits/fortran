@@ -14,13 +14,12 @@
 
     program Console1
     Use Elements, Only:AMS
+    ! Variables
     implicit Real(8) (A-H, O-Z)
     Character(255) Comment
     Integer(4), parameter::MaxAt=100
     Integer(4) NA(MaxAt)
-    Real(8) C(3,MaxAt), S(MaxAt), cm(3), x(MaxAt), TI(3,3), cp(3,MaxAt), v(3,3), d(3)
-    ! Variables
-
+    Real(8) C(3,MaxAt), S(MaxAt), cm(3), x(MaxAt), TI(3,3), cp(3,MaxAt), v(3,3), d(3), vt(3,3), cpr(3,MaxAt)
     ! Body of Console1
     ! Openning and reading
     Open (5, File  ='h2o.xyz')
@@ -60,6 +59,21 @@
         Enddo
     ! Diagonalize
         Call jacobi(TI,3,3,d,v,nrot)
+    ! Transposition of the matrix of eigenvectors
+        Do i=1,3
+            Do j=1,3
+                vt(i,j)=v(j,i)
+            Enddo
+        Enddo
+    ! Coordinates about principal moments of inertia
+        cpr=0
+        Do i=1,3
+            Do j=1,NumAt
+                Do k=1,NumAt
+                    cpr(i,j)=cpr(i,j)+vt(i,k)*cp(k,j)
+                Enddo
+            Enddo
+        Enddo
     ! Writing
     Open (6, File ='h2o.out')
         Write(6,'(/32x,''*** Program ReadXYZ ***''/)')
@@ -75,13 +89,21 @@
         Write(6,'(/14x,3f15.5)') TI(1:3, 1)
         Write(6,'(/14x,3f15.5)') TI(1:3, 2)
         Write(6,'(/14x,3f15.5/)') TI(1:3, 3)
-        Write(6,'("Main Moments")')
+        Write(6,'("Principal Moments of Inertia")')
         Do i=1,3
             Write(6,'(f15.5)') d(i)
         Enddo
         Write(6,'("Eigenvectors")')
         Do i=1,3
-            Write(6,'(4f15.5)') v(1:3,i)
+            Write(6,'(3f15.5)') v(1:3,i)
+        Enddo
+        Write(6,'("Transponated matrix of eigenvectors")')
+        Do i=1,3
+            Write(6,'(3f15.5)') vt(1:3,i)
+        Enddo
+        Write(6,'("Coordinates about principal moments of inertia")')
+        Do i=1,3
+            Write(6,'(3f15.5)') cpr(1:3,i)
         Enddo
     end program Console1
 !***********************************************************************************
