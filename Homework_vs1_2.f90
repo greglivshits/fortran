@@ -66,14 +66,15 @@
             Enddo
         Enddo
     ! Coordinates about principal moments of inertia
-        cpr=0
-        Do i=1,3
-            Do j=1,NumAt
-                Do k=1,3
-                    cpr(i,j)=cpr(i,j)+vt(i,k)*cp(k,j)
-                Enddo
-            Enddo
-        Enddo
+    !    cpr=0
+    !    Do i=1,3
+    !       Do j=1,NumAt
+    !            Do k=1,3
+    !                cpr(i,j)=cpr(i,j)+vt(i,k)*cp(k,j)
+    !            Enddo
+    !        Enddo
+    !    Enddo
+        cpr=matmul(vt,cp)
     ! Writing
     Open (6, File ='h2o.out')
         Write(6,'(/32x,''*** Program ReadXYZ ***''/)')
