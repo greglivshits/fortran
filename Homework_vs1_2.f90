@@ -69,7 +69,7 @@
         cpr=0
         Do i=1,3
             Do j=1,NumAt
-                Do k=1,NumAt
+                Do k=1,3
                     cpr(i,j)=cpr(i,j)+vt(i,k)*cp(k,j)
                 Enddo
             Enddo
