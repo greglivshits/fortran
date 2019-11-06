@@ -1,7 +1,7 @@
 Subroutine RotMat3(alp,C,m,n,NA,NumAt,Nrot,iAtoms,iu)
 Implicit Real(8) (A-H,O-Z)
 Integer(4),parameter::MaxAt=100
-Real(8) R(3), U(3,3), C(3,MaxAt), CM(3)
+Real(8) R(3), U(3,3), C(3,MaxAt), CM(3), d(3)
 Integer(4) NA(MaxAt), iAtoms(MaxAt)
 Real(8),parameter::deg=180.d0/3.141592653589793d0
 
@@ -9,12 +9,17 @@ iAtoms(m)=0
 iAtoms(n)=0
 
 a=alp
-Do i=1,3
+Do i=1,3 
     R(i)=C(i,n)-C(i,m)
 Enddo
 Rnorm = 1.d0/dsqrt(r(1)**2+r(2)**2+r(3)**2)
 R=R*Rnorm
-
+do i=1,3
+    d(i)=(c(i,m)+c(i,n))/2
+enddo
+do i=1,NumAt
+    c(1:3,i)=c(1:3,i)-d(1:3)
+enddo
 !If (irad==1) a=alp*deg
 ca=DCOSD(a/2.d0)
 sa=DSIND(a/2.d0)
@@ -41,9 +46,6 @@ sa=DSIND(a/2.d0)
 Do k=1,nrot
     Do j=1,NumAt
          If (iAtoms(j)==1) C(1:3,j)=matmul(U,C(1:3,j))
-!        Do i=1,3
-!          C(i,j)=U(i,1)*C(1,j)+U(i,2)*C(2,j)+U(i,3)*C(3,j)
-!        Enddo
     Enddo
     Call PrintNXYZ(iu,MaxAt,Numat,NA,C,'*RotGeo')
 Enddo
