@@ -604,3 +604,26 @@
  H59           1          0.503760      -3.882661      -4.103982
  H60           1         -0.307827      -3.581922      -3.603100
  ---------------------------------------------------------------
+
+ Rotational Symmetry       : Asymmetric Top
+ Symmetry Index            : 40000000
+ Symmetry Group            : C1   
+ Rotational Symmetry Number:  1
+
+
+ ****** PARAMETERS IN EFFECT *******
+
+ Temperature, K, set to  :    298.15
+ Pressure, Pa,   set to  : 101325.00
+ Rotation number set to  :         1
+ Internal rotations found:         0
+ Coordinate sets found   :         0
+ Frequencies found       :         0
+ Frequencies scaled by   :    1.0000
+ Number of atoms         :        60
+ Molecular mass          :  360.2112
+ Symmetry group          : C1  
+ Stoichiometry           : H40O20              
+
+ ***********************************
+

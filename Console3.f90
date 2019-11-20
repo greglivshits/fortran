@@ -21,68 +21,32 @@
     Character(255) Comment,Str,SubStr(MaxSubStr)
     Character(10) Aname
     Integer(4) NA(MaxAt)
-    Real(8) C(3,MaxAt,NumMol),CI(3,MaxAt),CM(3),U(3,3), X(3) !T(3,3),PMI(3),Paxes(3,3), 
-    
-! Reading
+    Real(8) C(3,MaxAt,NumMol),CI(3,MaxAt),CJ(3,MaxAt),CM(3),U(3,3), X(3)
+
+    Call Place(5,CJ)
+    C(1:3,1:NumAt,1)=CJ(1:3,1:NumAt)
+    k=1.d0
+Do while (k<=20)
     Open(5,File='h2o.inp')
-    Call ReadNXYZ(5,MaxAt,Numat,NA,CI,'*Geo')
-    Close(5)
-! Coordinates about mass center 
-    TotMass=0.d0
-    CM=0.d0
-    Do i=1,Numat
-        Call SetAName(NA(i),i,Aname)
-        Write(6,'(a10,3f15.5)')Aname,C(1:3,i,1)
-        TotMass=TotMass+AMS(NA(i))
-        CM=CM+AMS(NA(i))*CI(1:3,i)
+    Call Place(5,CJ)
+    m=0.d0
+    Do j=1,NumAt
+        Do i=1,k
+            Do l=1,NumAt
+                r=dsqrt(sum(CJ(1:3,j)**2-C(1:3,l,i)**2))
+                If (r<=1.d0) m=m+1
+            Enddo
+        Enddo
     Enddo
-    CM=CM/TotMass
-    Write(6,'(/'' TotMass = '',f15.5)')TotMass
-    
-    Write(6,'(/'' Mass center: '')')
-    Write(6,'(3f15.6)')CM
-    
-    Do i=1,Numat
-        CI(1:3,i)=CI(1:3,i)-CM
-    Enddo
-    Open(6,File='h2o.out')
-Do j=1,NumMol
-! Random Euler Angles
-    Call RANDOM_NUMBER(X)
-    X=360.d0*X
-! Rotation of molecule
-    irad=0
-    Call RotMat2(X(1),X(2),X(3),irad,U)
-    Do i=1,Numat
-        C(1:3,i,j)=matmul(U,CI(1:3,i))
-    Enddo
-! Random coordinates
-    Call RANDOM_NUMBER(X)
-    X=10.d0*X
-    Do i=1,NumAt
-        C(1:3,i,j)=C(1:3,i,j)+X
-    Enddo
-! Coordinates check
-!        Do i=1,j-1
-!            Do k=1,NumAt
-!                Do n=1,NumAt
-!                    q=dsqrt(sum(C(1:3,k,j)-C(1:3,n,i)))
-!                    if (q<1.d0) Then
-!                        Exit
-!                        Exit
-!                        Exit
-!                    endif
-!                Enddo
-!            Enddo
-!        Enddo
+    If (m==0) Then
+        k=k+1
+        C(1:3,1:NumAt,k) = CJ(1:3,1:NumAt)
+    Endif
 Enddo
+
+Open(6,File='h2o.out')
 Call PrintNXYZ(6,MaxAt,Numat,NA,C,'*RotGeo')
-!    Do i=1,MaxAt*NumMol
-!        If (C(1,1,i)/=0 .and. C(2,1,i)/=0 .and. C(3,1,i)/=0) then 
-!            CI(1:3,1,i)=C(1:3,1,i)
-!        Endif
-!    Enddo
-    end program RandomMoleculs
+end program RandomMoleculs
     
 !***********************************************************
 Subroutine ReadNXYZ(iu,MaxAt,Numat,NA,C,SearchStr)
