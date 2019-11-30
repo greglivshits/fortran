@@ -15,7 +15,7 @@
     program Console4
 
     implicit Real(8) (A-H,O-Z)
-    integer(4),parameter:: n=3
+    integer(4),parameter:: n=5
     Real(8) A(n,n), B(n), X2(n)
     
     Open(5,file='test.xyz')
@@ -29,20 +29,21 @@
     Call Gauss(n,A,B,X2)
     Open(6,file='otvet.xyz')
     Do i=1,n 
-      Write (6,'(4f12.5)') (A(i,j),j=1,n), B(i)
+      Write (6,'(<n+1>f8.3)') (A(i,j),j=1,n), B(i)
     Enddo
+    Write (6,*)
     Do i=1,n 
       Write (6,*) X2(i)
     Enddo
-    Write (6,*)
-    X2=matmul(A,X2)
-    Do i=1,n 
-        Write (6,*) X2(i)
-    Enddo
-    Write (6,*)
-    X2=X2-B
-    Do i=1,n 
-      Write (6,*) X2(i)
-    Enddo
+ !   Write (6,*)
+ !   X2=matmul(A,X2)
+ !   Do i=1,n 
+ !       Write (6,*) X2(i)
+ !   Enddo
+ !   Write (6,*)
+ !   X2=X2-B
+ !   Do i=1,n 
+ !     Write (6,*) X2(i)
+ !   Enddo
     end program Console4
 
