@@ -1,4 +1,4 @@
-Subroutine Gauss(n,A,B,X2)
+Subroutine Gauss(n,A,B,X1)
 implicit Real(8) (A-H,O-Z)
 Real(8) A(n,n), B(n), X1(n), X2(n), IPiv(n), R(n)
 Do i=1,n
@@ -24,21 +24,22 @@ Do i=1,n
         IPiv(i)=IPiv(l)
         IPiv(l)=q
     Endif
-    Do k=i+1,n
-        Do m=k,n
-            A(k,m)=A(k,m)-(A(i,k)/A(k,k))*A(i,m)
+    Do j=i+1,n
+        Do ma=i,n
+            A(j,ma)=A(j,ma)-(A(j,i)/A(i,i))*A(i,ma)
         Enddo
+        B(j)=B(j)-(A(j,i)/A(i,i))*B(j)
     Enddo
 Enddo
 if (a(n,n)==0) then
-    write(1,*)'0 решений'
-    go to 1
+    write(6,*)'0 решений'
+    stop
 endif
 if (b(n)==0) then
     write(6,*)'Ѕесконечное количество решений'
-    go to 1
+    stop
 endif
-!X1(n)=B(n)/A(n,n)
+X1(n)=B(n)/A(n,n)
 Do i=n-1,1,-1
     alp=0.d0
     Do j=i+1,n
@@ -46,7 +47,7 @@ Do i=n-1,1,-1
     Enddo
     X1(i)=(B(i)-alp)/A(i,i)
 Enddo
-Do i=1,n
-    X2(IPiv(i))=X1(i)
-Enddo
-1 End
+!Do i=1,n
+!    X1(IPiv(i))=X1(i)
+!Enddo
+End

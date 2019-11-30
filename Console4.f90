@@ -29,8 +29,18 @@
     Call Gauss(n,A,B,X2)
     Open(6,file='otvet.xyz')
     Do i=1,n 
-      Write (6,*) (A(i,j),j=1,n), B(i)
+      Write (6,'(4f12.5)') (A(i,j),j=1,n), B(i)
     Enddo
+    Do i=1,n 
+      Write (6,*) X2(i)
+    Enddo
+    Write (6,*)
+    X2=matmul(A,X2)
+    Do i=1,n 
+        Write (6,*) X2(i)
+    Enddo
+    Write (6,*)
+    X2=X2-B
     Do i=1,n 
       Write (6,*) X2(i)
     Enddo
